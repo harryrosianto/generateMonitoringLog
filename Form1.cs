@@ -1,25 +1,22 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Windows.Forms;
-
 namespace generateLogFile
 {
     public partial class Form1 : Form
     {
         private List<string> dataEntries;
-        private string defaultFilePath;
+        //private string defaultFilePath;
+        private string defaultFileName;
 
         public Form1()
         {
             InitializeComponent();
             dataEntries = new List<string>();
-            defaultFilePath = "D:\\Harry Rosianto's Folder\\16. TRIAL\\data.csv";
+            defaultFileName = "missionLog.csv";
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            //
         }
 
         private void btnAddData_Click_1(object sender, EventArgs e)
@@ -30,14 +27,19 @@ namespace generateLogFile
             // Validate that data is not empty
             if (!string.IsNullOrEmpty(data))
             {
-                dataEntries.Add(data);
+                string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+                string entryWithTimestamp = $"{timestamp},{data}";
+
+                dataEntries.Add(entryWithTimestamp);
                 txtDataInput.Clear();
 
-                try 
+                try
                 {
-                    using (StreamWriter writer = new StreamWriter(defaultFilePath, true))
+                    string filePath = Path.Combine(Environment.CurrentDirectory, defaultFileName);
+                    using (StreamWriter writer = new StreamWriter(filePath, true))
                     {
-                        writer.WriteLine(data);
+                        writer.WriteLine(entryWithTimestamp);
                     }
                 }
                 catch (Exception ex)
@@ -85,7 +87,7 @@ namespace generateLogFile
             //}
             //catch 
             //{
-                
+
             //}
         }
 
